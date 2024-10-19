@@ -29,6 +29,7 @@ const basename = path.basename(__filename);
 
 // Read all model files and initialize them
 fs.readdirSync(__dirname)
+
   .filter((file) => {
     return (
       file.indexOf('.') !== 0 &&
@@ -37,8 +38,9 @@ fs.readdirSync(__dirname)
       file.indexOf('.test.ts') === -1
     );
   })
-  .forEach((file) => {
-    const model = require(path.join(__dirname, file))(sequelize, DataTypes);
+  .forEach(async (file) => {
+    // const model = require(path.join(__dirname, file)).default(sequelize, DataTypes);
+    const model = new (await import(path.join(__dirname, file))).default(sequelize, DataTypes); // Use dynamic import
     db[model.name] = model;
   });
 
@@ -53,6 +55,4 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
-export { sequelize };
-// Export the db object and test function
-export { db, testConnection };
+export { sequelize, db, testConnection }; // Export db and testConnection

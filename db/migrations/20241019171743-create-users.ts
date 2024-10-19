@@ -7,18 +7,24 @@ export const up = async (queryInterface: QueryInterface) => {
       autoIncrement: true,
       primaryKey: true,
     },
-    username: {
+    name: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    isAdmin: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
+    role: {
+      type: DataTypes.ENUM('user', 'admin'),
+      defaultValue: 'user',
+      allowNull: false
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -29,7 +35,7 @@ export const up = async (queryInterface: QueryInterface) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
       allowNull: false,
-    },
+    }
   });
 };
 

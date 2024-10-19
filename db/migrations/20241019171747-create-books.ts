@@ -15,9 +15,14 @@ export const up = async (queryInterface: QueryInterface) => {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    publishedDate: {
-      type: DataTypes.DATE,
+    genre: {
+      type: DataTypes.STRING,
       allowNull: true,
+    },
+    availableCopies: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 1,
     },
     createdAt: {
       type: DataTypes.DATE,
@@ -28,7 +33,7 @@ export const up = async (queryInterface: QueryInterface) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
       allowNull: false,
-    },
+    }
   });
 };
 
