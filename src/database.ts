@@ -1,4 +1,7 @@
-import { Sequelize } from 'sequelize';
+// src/database.ts
+import { Sequelize, DataTypes } from 'sequelize';
+import fs from 'fs';
+import path from 'path';
 import dotenv from 'dotenv';
 
 // Load environment variables from .env file
@@ -20,5 +23,36 @@ const testConnection = async () => {
   }
 };
 
-// Export the Sequelize instance and the test function
-export { sequelize, testConnection };
+// Initialize the models
+const db: any = {};
+const basename = path.basename(__filename);
+
+// Read all model files and initialize them
+fs.readdirSync(__dirname)
+  .filter((file) => {
+    return (
+      file.indexOf('.') !== 0 &&
+      file !== basename &&
+      file.slice(-3) === '.ts' && // Changed to .ts for TypeScript
+      file.indexOf('.test.ts') === -1
+    );
+  })
+  .forEach((file) => {
+    const model = require(path.join(__dirname, file))(sequelize, DataTypes);
+    db[model.name] = model;
+  });
+
+// Call associate method on models if defined
+Object.keys(db).forEach((modelName) => {
+  if (db[modelName].associate) {
+    db[modelName].associate(db);
+  }
+});
+
+// Attach the Sequelize instance to the db object
+db.sequelize = sequelize;
+db.Sequelize = Sequelize;
+
+export { sequelize };
+// Export the db object and test function
+export { db, testConnection };
