@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../database'; // Adjust the import path as needed
+import { sequelize } from './database';
 
 interface UserAttributes {
   id: string;
@@ -19,7 +19,6 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
   public role!: string;
 
   public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
 
   static associate(models: any) {
     User.hasMany(models.Borrow, { foreignKey: 'userId' });
@@ -29,10 +28,10 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 User.init(
   {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
+      autoIncrement: true,
     },
     name: {
       type: DataTypes.STRING,
@@ -48,13 +47,14 @@ User.init(
       allowNull: false,
     },
     role: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM('user', 'admin'),
       allowNull: false,
     },
   },
   {
     sequelize,
     modelName: 'User',
+    tableName: 'users',
   }
 );
 

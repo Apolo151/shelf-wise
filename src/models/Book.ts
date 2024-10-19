@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from '../database';
+import { sequelize } from './database';
 
 interface BookAttributes {
   id: string;
@@ -19,7 +19,6 @@ class Book extends Model<BookAttributes, BookCreationAttributes> implements Book
   public availableCopies!: number;
 
   public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
 
   static associate(models: any) {
     Book.hasMany(models.Borrow, { foreignKey: 'bookId' });
@@ -29,10 +28,10 @@ class Book extends Model<BookAttributes, BookCreationAttributes> implements Book
 Book.init(
   {
     id: {
-      type: DataTypes.UUID,
-      defaultValue: DataTypes.UUIDV4,
+      type: DataTypes.INTEGER,
       primaryKey: true,
       allowNull: false,
+      autoIncrement: true,
     },
     title: {
       type: DataTypes.STRING,
@@ -54,6 +53,7 @@ Book.init(
   {
     sequelize,
     modelName: 'Book',
+    tableName: 'books',
   }
 );
 

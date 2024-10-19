@@ -27,12 +27,12 @@ export const up = async (queryInterface: QueryInterface) => {
       onUpdate: 'CASCADE', // When book id updates, cascade to borrows
       onDelete: 'CASCADE', // When book is deleted, cascade to borrows
     },
-    borrowedAt: {
+    borrowDate: {
       type: DataTypes.DATE,
       allowNull: false,
       defaultValue: DataTypes.NOW, // Default to current timestamp
     },
-    returnedAt: {
+    returnDate: {
       type: DataTypes.DATE,
       allowNull: true, // Can be null if the book has not been returned
     },
@@ -45,7 +45,7 @@ export const up = async (queryInterface: QueryInterface) => {
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
       allowNull: false,
-    },
+    }
   });
 };
 

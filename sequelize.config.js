@@ -1,4 +1,5 @@
 require('ts-node').register(); // This allows running TypeScript with Sequelize CLI
+require('dotenv').config(); // This allows reading environment variables from .env file
 
 module.exports = {
   "development": {
