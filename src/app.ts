@@ -8,10 +8,10 @@ import borrowRoutes from './routes/borrowRoutes';
 
 import { ErrorHandler } from './middleware/errorHandler';
 import dotenv from 'dotenv';
-import { report } from 'process';
 import reportRoutes from './routes/reportRoutes';
+import envFilePath from './config/env-config';
 
-dotenv.config(); // Load environment variables from .env file
+dotenv.config({ path: envFilePath });
 
 const app = express();
 

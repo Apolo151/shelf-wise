@@ -3,9 +3,10 @@ import { Sequelize, DataTypes } from 'sequelize';
 import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
+import envFilePath from '../config/env-config';
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({ path: envFilePath });
 
 // Create a Sequelize instance
 const sequelize = new Sequelize(process.env.DATABASE_URI as string, {
