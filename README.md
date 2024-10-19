@@ -5,5 +5,4 @@ ShelfWise is a library management system
 
 ## File-Structure
 
-
 ## Local Setup
