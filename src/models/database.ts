@@ -56,4 +56,28 @@ Object.keys(db).forEach((modelName) => {
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
+// Connect to the database
+export const connectToDatabase = async () => {
+  try {
+    await sequelize.authenticate(); // Use authenticate instead of sync for testing
+    console.log('Database connected successfully');
+  } catch (error) {
+    console.error('Database connection error:', error);
+    throw error;
+  }
+};
+
+// Close the database connection (after tests)
+export const closeDatabaseConnection = async () => {
+  try {
+    console.log('Database connection closed');
+    await sequelize.close();
+    
+  } catch (error) {
+    console.error('Error closing database connection:', error);
+    throw error;
+  }
+};
+
+
 export { sequelize, db, testConnection }; // Export db and testConnection

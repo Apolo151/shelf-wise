@@ -14,10 +14,10 @@ export const getBooks = async (req: Request, res: Response) => {
 
 // Add a new book (admin only)
 export const addBook = async (req: Request, res: Response) => {
-  const { title, author, isbn } = req.body;
+  const { title, author, genre, availableCopies} = req.body;
 
   try {
-    const newBook = await Book.create({ title, author , availableCopies:0}); // Create book
+    const newBook = await Book.create({ title, author, genre, availableCopies: (availableCopies|0)}); // Create book
     res.status(201).json({ success: true, book: newBook });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error adding book', error });
@@ -49,7 +49,7 @@ export const deleteBook = async (req: Request, res: Response) => {
   try {
     const deleted = await Book.destroy({ where: { id } }); // Delete book
     if (deleted) {
-      res.json({ success: true, message: 'Book deleted' });
+      res.status(204).json({ success: true, message: 'Book deleted' });
     } else {
       res.status(404).json({ success: false, message: 'Book not found' });
     }

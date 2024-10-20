@@ -16,6 +16,6 @@ router.post('/', authenticateJWT, adminMiddleware, addBook);
 router.put('/:id', authenticateJWT, updateBook);
 
 // Delete a book by ID (admin only)
-router.delete('/:id', authenticateJWT, deleteBook);
+router.delete('/:id', authenticateJWT, adminMiddleware, deleteBook);
 
 export default router;

@@ -9,7 +9,7 @@ dotenv.config({ path: envFilePath });
 
 
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+  const token = req.headers.authorization?.split(' ')[1]; // Extract token from Authorization header
   if (!token) {
     res.status(401).json({ error: 'Access denied' });
     next();

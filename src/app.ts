@@ -21,7 +21,7 @@ app.use(express.json()); // For parsing application/json
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
-app.use('/api/borrow', borrowRoutes);
+app.use('/api', borrowRoutes);
 app.use('/api/reports', reportRoutes);
 
 // Error handling middleware

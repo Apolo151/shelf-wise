@@ -2,7 +2,7 @@ import { Model, DataTypes, Optional } from 'sequelize';
 import { sequelize } from './database';
 
 interface BookAttributes {
-  id: string;
+  id: number;
   title: string;
   author: string;
   genre?: string;
@@ -12,7 +12,7 @@ interface BookAttributes {
 interface BookCreationAttributes extends Optional<BookAttributes, 'id'> {}
 
 class Book extends Model<BookAttributes, BookCreationAttributes> implements BookAttributes {
-  public id!: string;
+  public id!: number;
   public title!: string;
   public author!: string;
   public genre?: string;

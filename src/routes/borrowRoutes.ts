@@ -6,12 +6,12 @@ import { authenticateJWT } from '../middleware/authMiddleware'; // Import JWT mi
 const router = express.Router();
 
 // Borrow a book
-//router.post('/', authenticateJWT, borrowBook);
+router.post('/borrow', authenticateJWT, borrowBook);
 
 // Return a borrowed book
-router.patch('/return', authenticateJWT, returnBook);
+router.put('/return', authenticateJWT, returnBook);
 
 // Retrieve borrowing history for the logged-in user
-router.get('/history', authenticateJWT, getBorrowHistory);
+router.get('/borrow/history', authenticateJWT, getBorrowHistory);
 
 export default router;
