@@ -2,7 +2,6 @@
 import express from 'express';
 import { getBorrowedBooksReport, getPopularBooksReport } from '../controllers/reportController';
 import { authenticateJWT } from '../middleware/authMiddleware'; // Import your authentication middleware
-import adminMiddleware from '../middleware/adminMiddleware';
 
 const router = express.Router();
 
@@ -45,10 +44,8 @@ const router = express.Router();
  *                         example: 20
  *       401:
  *         description: Unauthorized. JWT token is missing or invalid.
- *       403:
- *         description: Forbidden. Only admins are allowed to access this endpoint.
  */
-router.get('/borrowed', authenticateJWT, adminMiddleware, getBorrowedBooksReport);
+router.get('/borrowed', authenticateJWT, getBorrowedBooksReport);
 
 /**
  * @swagger
@@ -82,9 +79,7 @@ router.get('/borrowed', authenticateJWT, adminMiddleware, getBorrowedBooksReport
  *                         example: 35
  *       401:
  *         description: Unauthorized. JWT token is missing or invalid.
- *       403:
- *         description: Forbidden. Only admins are allowed to access this endpoint.
  */
-router.get('/popular', authenticateJWT, adminMiddleware, getPopularBooksReport);
+router.get('/popular', authenticateJWT, getPopularBooksReport);
 
 export default router;
