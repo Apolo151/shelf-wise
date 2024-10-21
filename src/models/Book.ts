@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from './database';
+import { sequelize } from './index';
 
 interface BookAttributes {
   id: number;
@@ -21,7 +21,7 @@ class Book extends Model<BookAttributes, BookCreationAttributes> implements Book
   public readonly createdAt!: Date;
 
   static associate(models: any) {
-    Book.hasMany(models.Borrow, { foreignKey: 'bookId' });
+    Book.hasMany(models.Borrow, { foreignKey: 'bookId', as: 'borrows' });
   }
 }
 

@@ -3,7 +3,7 @@ import app from '../src/app';
 import Book from '../src/models/Book';
 import User from '../src/models/User';
 import Borrow from '../src/models/Borrow';
-import { closeDatabaseConnection } from '../src/models/database';
+import { closeDatabaseConnection } from '../src/models/index';
 import bcrypt from 'bcrypt';
 
 describe('Borrow API', () => {

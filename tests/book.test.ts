@@ -2,7 +2,7 @@ import request from 'supertest';
 import app from '../src/app';
 import Book from '../src/models/Book'; // Assuming this is your Book model
 import User from '../src/models/User';
-import { closeDatabaseConnection, sequelize } from '../src/models/database'; // Make sure sequelize is imported
+import { closeDatabaseConnection } from '../src/models/index'; // Make sure sequelize is imported
 import bcrypt from 'bcrypt';
 
 describe('Book API', () => {

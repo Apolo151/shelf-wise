@@ -1,5 +1,5 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from './database';
+import { sequelize } from './index';
 
 interface BorrowAttributes {
   id: number;
@@ -21,8 +21,8 @@ class Borrow extends Model<BorrowAttributes, BorrowCreationAttributes> implement
   public readonly createdAt!: Date;
 
   static associate(models: any) {
-    Borrow.belongsTo(models.User, { foreignKey: 'userId' });
-    Borrow.belongsTo(models.Book, { foreignKey: 'bookId' });
+    Borrow.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    Borrow.belongsTo(models.Book, { foreignKey: 'bookId', as: 'book' });
   }
 }
 

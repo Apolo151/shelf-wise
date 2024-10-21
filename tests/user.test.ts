@@ -1,7 +1,7 @@
 import request from 'supertest';
 import app from '../src/app'; // Assuming this is where your express app is
 import User from '../src/models/User';
-import { closeDatabaseConnection } from '../src/models/database';
+import { closeDatabaseConnection } from '../src/models/index';
 
 describe('User API', () => {
   beforeEach(async () => {

@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import dotenv from 'dotenv';
 import envFilePath from '../config/env-config';
+import Book from './Book';
+import Borrow from './Borrow';
 
 // Load environment variables from .env file
 dotenv.config({ path: envFilePath });
@@ -13,16 +15,6 @@ const sequelize = new Sequelize(process.env.DATABASE_URI as string, {
   dialect: 'postgres',
   logging: false, // Set to true for logging SQL queries
 });
-
-// Test the database connection
-const testConnection = async () => {
-  try {
-    await sequelize.authenticate();
-    console.log('Connection to the database has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the database:', error);
-  }
-};
 
 // Initialize the models
 const db: any = {};
@@ -47,6 +39,7 @@ fs.readdirSync(__dirname)
 
 // Call associate method on models if defined
 Object.keys(db).forEach((modelName) => {
+  console.log(modelName)
   if (db[modelName].associate) {
     db[modelName].associate(db);
   }
@@ -80,4 +73,4 @@ export const closeDatabaseConnection = async () => {
 };
 
 
-export { sequelize, db, testConnection }; // Export db and testConnection
+export { sequelize, db }; // Export db and testConnection

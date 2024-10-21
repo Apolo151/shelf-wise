@@ -1,6 +1,6 @@
 // src/app.ts
 import express from 'express';
-import { sequelize } from './models/database';
+import { sequelize } from './models/index';
 // Import routes
 import userRoutes from './routes/userRoutes';
 import bookRoutes from './routes/bookRoutes';
