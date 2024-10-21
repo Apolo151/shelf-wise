@@ -128,33 +128,82 @@ Creates a new book (admin only).
 
 ### Borrow Endpoints
 
-
 #### Borrow a book
 **POST** `/borrows`
 
-Creates a new borrow entry for a book.
+Creates a new borrow entry for a book. Decreases the number of available copies of the book if it's available.
 
 - **URL**: `/borrows`
 - **Method**: `POST`
 - **Request Body**:
   ```json
   {
-    "userId": 1,
     "bookId": 2
   }
   ```
 - **Response**:
-  - `201 Created`
+  - `200 OK` (Success)
   ```json
   {
-    "borrowId": 1,
-    "userId": 1,
-    "bookId": 2,
-    "borrowDate": "2024-10-21",
-    "returnDate": null
+    "success": true,
+    "borrowId": 1
   }
   ```
 
+---
+
+#### Return a borrowed book
+**POST** `/borrows/return`
+
+Marks a book as returned, updating the borrow record with a return date and increasing the available copies of the book.
+
+- **URL**: `/borrows/return`
+- **Method**: `POST`
+- **Request Body**:
+  ```json
+  {
+    "bookId": 2
+  }
+  ```
+- **Response**:
+  - `200 OK` (Success)
+  ```json
+  {
+    "success": true,
+    "message": "Book returned successfully"
+  }
+  ```
+
+---
+
+#### Get borrowing history for the logged-in user
+**GET** `/borrows/history`
+
+Fetches the borrowing history for the currently logged-in user.
+
+- **URL**: `/borrows/history`
+- **Method**: `GET`
+- **Response**:
+  - `200 OK` (Success)
+  ```json
+  {
+    "success": true,
+    "history": [
+      {
+        "borrowId": 1,
+        "bookId": 2,
+        "borrowDate": "2024-10-21",
+        "returnDate": null
+      },
+      {
+        "borrowId": 2,
+        "bookId": 3,
+        "borrowDate": "2024-09-15",
+        "returnDate": "2024-09-20"
+      }
+    ]
+  }
+  ```
 ---
 
 ### Report Endpoints
@@ -169,16 +218,22 @@ Retrieves a report of all currently borrowed books.
 - **Response**:
   - `200 OK`
   ```json
-  [
     {
-      "bookId": 1,
-      "title": "The Great Gatsby",
-      "author": "F. Scott Fitzgerald",
-      "borrowedDate": "2024-10-21",
-      "returnDate": null,
-      "borrower": "Jane Doe"
+        "borrowedBooks": [
+        {
+            "title": "New Book 3",
+            "author": "Author Name",
+            "borrowCount": "2",
+            "availableCopies": 0
+        },
+        {
+            "title": "New Book 2",
+            "author": "Author Name",
+            "borrowCount": "1",
+            "availableCopies": 3
+        },
+        ]
     }
-  ]
   ```
 
 #### Get the most popular books
