@@ -3,7 +3,13 @@ import bcrypt from 'bcrypt';
 
 export const up = async (queryInterface: QueryInterface) => {
   const hashedPassword = await bcrypt.hash('adminpassword', 10); // Hashing password
-
+  // chech if user already exists
+  const user = await queryInterface.sequelize.query(
+    `SELECT * FROM users WHERE email = 'admin@example.com'`,
+  );
+  if (user[0].length > 0) {
+    return;
+  }
   return queryInterface.bulkInsert('users', [
     {
       name: 'admin',

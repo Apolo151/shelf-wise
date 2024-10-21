@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  api:
+    build: .
+    container_name: api-service
+    ports:
+      - '3000:3000'
+    environment:
+      - DATABASE_URI=postgres://sw_user:sw_password@postgresql:5432/shelfwise
+      - PORT=3000
+      - JWT_SECRET=secret
+    depends_on:
+      postgresql:
+        condition: service_healthy  # Wait until the database is healthy
+
+  postgresql:
+    image: postgres:latest
+    environment:
+      # POSTGRES_DB: code-quests-db
+      POSTGRES_MULTIPLE_DATABASES: shelfwise,shelfwise_test
+      POSTGRES_USER: sw_user
+      POSTGRES_PASSWORD: sw_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/data
+      - ./scripts:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sw_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres-data:
