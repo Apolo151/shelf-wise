@@ -1,64 +1,57 @@
-import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from './index';
+// src/models/User.ts
+import {knexInstance as knex} from '../database'; // Import your Knex instance
 
-interface UserAttributes {
+export interface UserAttributes {
   id: number;
-  name: string;
+  full_name: string;
   email: string;
   password: string;
-  role: string;
+  role: 'user' | 'admin';
 }
 
-interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
-
-class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: number;
-  public name!: string;
-  public email!: string;
-  public password!: string;
-  public role!: string;
-
-  public readonly createdAt!: Date;
-
-  static associate(models: any) {
-    User.hasMany(models.Borrow, { foreignKey: 'userId' });
-  }
-  static deleteMany() {
-    return User.destroy({ where: {} });
-  }
+export interface UserCreationAttributes {
+  full_name: string;
+  email: string;
+  password: string;
+  role: 'user' | 'admin';
 }
 
-User.init(
-  {
-    id: {
-      type: DataTypes.INTEGER,
-      primaryKey: true,
-      allowNull: false,
-      autoIncrement: true,
-    },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    email: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      unique: true,
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    role: {
-      type: DataTypes.ENUM('user', 'admin'),
-      allowNull: false,
-    },
-  },
-  {
-    sequelize,
-    modelName: 'User',
-    tableName: 'users',
+class User {
+  // Create a new user
+  static async create(userData: UserCreationAttributes): Promise<UserAttributes> {
+    const [user] = await knex('users').insert(userData).returning('*');
+    return user;
   }
-);
+
+  // Find a user by ID
+  static async findById(id: number): Promise<UserAttributes | undefined> {
+    return await knex('users').where({ id }).first();
+  }
+
+  // Find a user by email
+  static async findByEmail(email: string): Promise<UserAttributes | undefined> {
+    return await knex('users').where({ email }).first();
+  }
+
+  // Get all users
+  static async findAll(): Promise<UserAttributes[]> {
+    return await knex('users').select('*');
+  }
+
+  // Update a user
+  static async update(id: number, userData: Partial<UserCreationAttributes>): Promise<number> {
+    return await knex('users').where({ id }).update(userData);
+  }
+
+  // Delete a user
+  static async delete(id: number): Promise<number> {
+    return await knex('users').where({ id }).del();
+  }
+
+  // Delete all users
+  static async destroy(): Promise<void> {
+    await knex('users').del();
+  }
+}
 
 export default User;

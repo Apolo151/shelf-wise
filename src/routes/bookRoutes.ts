@@ -3,6 +3,7 @@ import express from 'express';
 import { addBook, updateBook, deleteBook, getBooks } from '../controllers/bookController'; // Import book controller functions
 import { authenticateJWT } from '../middleware/authMiddleware'; // Import JWT middleware
 import adminMiddleware from '../middleware/adminMiddleware';
+import { validateBookData } from '../middleware/validationMiddleware';
 
 const router = express.Router();
 
@@ -70,7 +71,7 @@ router.get('/', getBooks);
  *       403:
  *         description: Forbidden - Admin access required.
  */
-router.post('/', authenticateJWT, adminMiddleware, addBook);
+router.post('/', authenticateJWT, adminMiddleware, validateBookData, addBook);
 
 /**
  * @swagger
@@ -108,7 +109,7 @@ router.post('/', authenticateJWT, adminMiddleware, addBook);
  *       404:
  *         description: Book not found.
  */
-router.put('/:id', authenticateJWT, updateBook);
+router.put('/:id', authenticateJWT, adminMiddleware, updateBook);
 
 
 // Delete a book by ID (admin only)

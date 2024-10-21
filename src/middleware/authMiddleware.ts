@@ -2,10 +2,9 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import envFilePath from '../config/env-config';
 
 // Load environment variables from .env file
-dotenv.config({ path: envFilePath });
+dotenv.config({});
 
 
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {

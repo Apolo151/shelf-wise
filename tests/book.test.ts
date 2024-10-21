@@ -1,8 +1,6 @@
 import request from 'supertest';
 import app from '../src/app';
-import Book from '../src/models/Book'; // Assuming this is your Book model
-import User from '../src/models/User';
-import { closeDatabaseConnection } from '../src/models/index'; // Make sure sequelize is imported
+import {knexInstance as knex} from '../src/database'; // Import Knex instance
 import bcrypt from 'bcrypt';
 
 describe('Book API', () => {
@@ -10,16 +8,16 @@ describe('Book API', () => {
   let userToken: string;
 
   beforeAll(async () => {
-    // Seed an admin and user
-    await User.bulkCreate([
+    // Seed an admin and user using Knex
+    await knex('users').insert([
       {
-        name: 'Admin',
+        full_name: 'Admin',
         email: 'admin@example.com',
         password: await bcrypt.hash('adminpassword', 10),
         role: 'admin',
       },
       {
-        name: 'User',
+        full_name: 'User',
         email: 'user@example.com',
         password: await bcrypt.hash('userpassword', 10),
         role: 'user',
@@ -41,12 +39,12 @@ describe('Book API', () => {
         email: 'user@example.com',
         password: 'userpassword',
       });
-    userToken = userLoginRes.body.token; // Use the correct property
+    userToken = userLoginRes.body.token;
   });
 
   beforeEach(async () => {
-    // Drop all books before running tests
-    await Book.destroy({ where: {} });
+    // Clear all books before running tests using Knex
+    await knex('books').del();
   });
 
   it('should create a new book (Admin)', async () => {
@@ -56,8 +54,8 @@ describe('Book API', () => {
       .send({
         title: 'The Great Gatsby',
         author: 'F. Scott Fitzgerald',
-        publishedDate: '1925-04-10',
-        copies: 5,
+        genre: 'Fiction',
+        availableCopies: 5,
       });
 
     expect(res.statusCode).toEqual(201);
@@ -72,51 +70,57 @@ describe('Book API', () => {
       .send({
         title: 'The Great Gatsby',
         author: 'F. Scott Fitzgerald',
-        publishedDate: '1925-04-10',
-        copies: 5,
+        genre: 'Fiction',
+        availableCopies: 5,
       });
 
     expect(res.statusCode).toEqual(403); // Forbidden
   });
 
   it('should update a book (Admin)', async () => {
-    const book = await Book.create({
+    // Insert a book using Knex
+    const [bookIdObj] = await knex('books').insert({
       title: 'Old Book',
       author: 'Old Author',
       availableCopies: 3,
-    });
+    }).returning('id');
 
     const res = await request(app)
-      .put(`/api/books/${book.id}`)
+      .put(`/api/books/${bookIdObj.id}`)
       .set('Authorization', `Bearer ${adminToken}`)
+      .set('Content-Type', 'application/json')
       .send({
         title: 'New Book Title',
+        author: 'New Author',
+        availableCopies: 10,
       });
-
+    
+    console.log(res.body)
     expect(res.statusCode).toEqual(200);
     expect(res.body.book.title).toEqual('New Book Title');
   });
 
-  it('should delete a book', async () => {
-    const book = await Book.create({
+  it('should delete a book (Admin)', async () => {
+    // Insert a book using Knex
+    const [bookIdObj] = await knex('books').insert({
       title: 'Book to delete',
-      author: 'Author',
+      author: 'Author of book to delete',
       availableCopies: 1,
-    });
+    }).returning('id');
 
     const res = await request(app)
-      .delete(`/api/books/${book.id}`)
+      .delete(`/api/books/${bookIdObj.id}`)
       .set('Authorization', `Bearer ${adminToken}`);
 
     expect(res.statusCode).toEqual(204); // No content on delete
   });
 
   afterAll(async () => {
-    // Cleanup: Destroy all users and close DB connection
-    await User.destroy({ where: {} });
-    await Book.destroy({ where: {} });
+    // Cleanup: Destroy all users and books, then close Knex connection
+    await knex('users').del();
+    await knex('books').del();
 
-    // Ensure the database connection is properly closed
-    await closeDatabaseConnection();
+    // Ensure Knex closes the connection
+    await knex.destroy();
   });
 });

@@ -4,7 +4,7 @@
 erDiagram
     USER {
         UUID id PK
-        STRING name
+        STRING full_name
         STRING email
         STRING password
         STRING role

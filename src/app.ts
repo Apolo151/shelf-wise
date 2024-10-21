@@ -1,6 +1,6 @@
 // src/app.ts
 import express from 'express';
-import { sequelize } from './models/index';
+import bodyParser from 'body-parser';
 // Import routes
 import userRoutes from './routes/userRoutes';
 import bookRoutes from './routes/bookRoutes';
@@ -11,9 +11,8 @@ import { ErrorHandler } from './middleware/errorHandler';
 import { setupSwagger } from './utils/swagger';
 
 import dotenv from 'dotenv';
-import envFilePath from './config/env-config';
 
-dotenv.config({ path: envFilePath });
+dotenv.config();
 
 const app = express();
 
@@ -28,11 +27,6 @@ app.use('/api/reports', reportRoutes);
 
 // Error handling middleware
 app.use(ErrorHandler);
-
-// Database synchronization
-sequelize.sync()
-  .then(() => console.log('Database connected successfully'))
-  .catch((error) => console.error('Database connection error:', error));
 
 setupSwagger(app);
 

@@ -1,23 +1,24 @@
 import request from 'supertest';
 import app from '../src/app'; // Assuming this is where your express app is
 import User from '../src/models/User';
-import { closeDatabaseConnection } from '../src/models/index';
+import { knexInstance as knex } from '../src/database'; // Import Knex instance
 
 describe('User API', () => {
   beforeEach(async () => {
     // Drop all users before running tests
-    await User.destroy({ where: {} });
+    await User.destroy();
   });
 
   it('should register a new user', async () => {
     const res = await request(app)
       .post('/api/users/register')
       .send({
-        name: 'John Doe',
+        full_name: 'John Doe',
         email: 'john.doe@example.com',
         password: 'password123',
       });
-
+    
+    console.log(res.body);
     expect(res.statusCode).toEqual(201);
     expect(res.body.user).toHaveProperty('id');
     expect(res.body.user.email).toEqual('john.doe@example.com');
@@ -28,7 +29,7 @@ describe('User API', () => {
     await request(app)
       .post('/api/users/register')
       .send({
-        name: 'John Doe',
+        full_name: 'John Doe',
         email: 'john.doe@example.com',
         password: 'password123',
       });
@@ -40,14 +41,15 @@ describe('User API', () => {
         email: 'john.doe@example.com',
         password: 'password123',
       });
-
+    
     expect(res.statusCode).toEqual(200);
     expect(res.body).toHaveProperty('token'); // Assuming JWT token is returned
   });
 
   afterAll(async () => {
     // Cleanup: Drop all users and close database connection
-    await User.destroy({ where: {} });
-    await closeDatabaseConnection();
+    await User.destroy();
+    // Ensure Knex closes the connection
+    await knex.destroy();
   });
 });

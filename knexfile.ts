@@ -8,6 +8,10 @@ console.log(process.env.DATABASE_URL);
 const config: { [key: string]: Knex.Config } = {
   development: {
     client: 'pg',
+    pool: {
+      min: 2,
+      max: 10,
+    },
     connection: process.env.DATABASE_URL,
     migrations: {
       directory: './db/migrations',
@@ -16,13 +20,30 @@ const config: { [key: string]: Knex.Config } = {
     seeds: {
       directory: './db/seeds',
     },
+    debug: true,
+  },
+  test: {
+    client: 'pg',
+    pool: {
+      min: 2,
+      max: 10,
+    },
+    connection: process.env.TEST_DATABASE_URL,
+    migrations: {
+      directory: './db/migrations',
+      extension: 'ts',
+    },
+    seeds: {
+      directory: './db/seeds',
+    },
+    debug: false,
   },
   production: {
     client: 'pg',
     connection: process.env.DATABASE_URL,
     migrations: {
       directory: './db/migrations',
-      extension: 'ts',
+      extension: 'js',
     },
     seeds: {
       directory: './db/seeds',
@@ -31,3 +52,5 @@ const config: { [key: string]: Knex.Config } = {
 };
 
 module.exports = config;
+
+export default config;
