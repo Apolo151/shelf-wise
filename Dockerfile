@@ -8,8 +8,8 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json to install dependencies
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm ci --only=production
+# Install dependencies
+RUN npm ci
 
 # Copy the rest of the application files
 COPY . .
@@ -32,6 +32,8 @@ EXPOSE 3000
 
 # Define environment variables
 ENV NODE_ENV=production
+
+RUN chmod +x entrypoint.sh
 
 # Command to start the backend
 CMD ["sh","entrypoint.sh"]

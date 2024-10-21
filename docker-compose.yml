@@ -6,10 +6,13 @@ services:
     container_name: api-service
     ports:
       - '3000:3000'
+    env_file:
+      - .env
     environment:
-      - DATABASE_URI=postgres://sw_user:sw_password@postgresql:5432/shelfwise
+      - DATABASE_URL=postgres://sw_user:sw_password@postgresql:5432/shelfwise
+      - DATABASE_URL_TEST=postgres://sw_user:sw_password@postgresql:5432/shelfwise_test
       - PORT=3000
-      - JWT_SECRET=secret
+      - JWT_SECRET=YOUR_SECRET
     depends_on:
       postgresql:
         condition: service_healthy  # Wait until the database is healthy
@@ -30,7 +33,7 @@ services:
       test: ["CMD-SHELL", "pg_isready -U sw_user"]
       interval: 10s
       timeout: 5s
-      retries: 5
+      retries: 3
 
 volumes:
   postgres-data:

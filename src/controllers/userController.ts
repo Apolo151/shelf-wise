@@ -55,22 +55,3 @@ export const loginUser = async (req: Request, res: Response) => {
     res.status(500).json({ success: false, message: 'Login error', error });
   }
 };
-
-// Get user profile
-export const getUserProfile = async (req: Request, res: Response) => {
-  try {
-    // get the user ID from the token
-    const userId = req.body.user.id;
-
-    // Find the user by ID
-    const user = await User.findById(userId);
-
-    if (user) {
-      res.json({ success: true, user });
-    } else {
-      res.status(404).json({ success: false, message: 'User not found' });
-    }
-  } catch (error) {
-    res.status(500).json({ success: false, message: 'Error fetching user profile', error });
-  }
-};

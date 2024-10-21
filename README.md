@@ -11,8 +11,8 @@ ShelfWise is a library management system designed to streamline the process of m
 - **JWT Authentication**: Secure API with JWT-based authentication for protected endpoints.
 - **Role-based Authorization**: Different roles (admin, user) with access control.
 - **PostgreSQL Database**: Utilizes PostgreSQL for data storage.
-- **RESTful API**: Built with Node.js, Express, and Sequelize for database interactions.
-- **Migrations**: Easy database setup with Sequelize migrations.
+- **RESTful API**: Built with Node.js, Express, and Knex for database interactions.
+- **Migrations**: Easy database setup with Knex.
 - **Unit Testing**: Unit tests for API endpoints.
 
 ## File Structure
@@ -20,19 +20,19 @@ ShelfWise is a library management system designed to streamline the process of m
 ```bash
 ├── db                      # database stuff
 │   ├── migrations
-│   └── seeders
+│   └── seeds
 ├── docker-compose.yml
-├── dockerfile
+├── Dockerfile
 ├── docs                    # documentation and diagrams
 │   ├── ERD.md
 │   └── SequenceDiagram.md
+├── docs                    # scripts used for automating functionalities
 ├── jest.config.js
 ├── sequelize.config.js     # Sequelize Config
 ├── src
 │   ├── app.ts
-│   ├── config
-│   │   ├── config.json
-│   │   └── env-config.ts
+│   ├── server.ts
+│   ├── database.ts       # Database init
 │   ├── controllers/      # Contains API controller logic
 │   ├── middlewares/      # Middleware (authentication, error handling, etc.)
 │   ├── models/           # Sequelize models (User, Book, Borrow, etc.)

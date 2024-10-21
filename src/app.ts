@@ -25,6 +25,11 @@ app.use('/api/books', bookRoutes);
 app.use('/api', borrowRoutes);
 app.use('/api/reports', reportRoutes);
 
+// health check endpoint
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'Server is up and running' });
+});
+
 // Error handling middleware
 app.use(ErrorHandler);
 
