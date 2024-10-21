@@ -1,23 +1,45 @@
 // src/controllers/reportController.ts
 import { Request, Response } from 'express';
-import Borrow from '../models/Borrow'; // Import your Borrow model
-import Book from '../models/Book'; // Import your Book model
-import { knexInstance as knex } from '../database'; // Import your Knex instance
+import { knexInstance as knex } from '../database';
 
 // Get a report of currently borrowed books
 export const getBorrowedBooksReport = async (req: Request, res: Response) => {
   try {
     // Fetch borrowed books with returnDate as NULL
     const borrowedBooks = await knex('borrows')
-      .whereNull('returnDate') // Knex way to check for NULL values
-      .select('*');
+      .whereNull('returnDate') // Filter only borrowed books
+      .select('bookId') // Select only the bookId to count borrows
+      .count('* as borrowCount') // Count how many times each book has been borrowed
+      .groupBy('bookId'); // Group by bookId
 
-    res.status(200).json({ success: true, borrowedBooks });
+    // Fetch additional details about each book, including available copies
+    const bookDetails = await Promise.all(
+      borrowedBooks.map(async (borrowedBook) => {
+        const book = await knex('books')
+          .where({ id: borrowedBook.bookId })
+          .select('title', 'author') // Select relevant book attributes
+          .first();
+
+        const availableCopies = await knex('books')
+          .where({ id: borrowedBook.bookId })
+          .select('availableCopies')
+          .first();
+
+        return {
+          ...book,
+          borrowCount: borrowedBook.borrowCount as number,
+          availableCopies: availableCopies?.copies || 0, // Default to 0 if no copies found
+        };
+      })
+    );
+
+    res.status(200).json({ success: true, borrowedBooks: bookDetails });
   } catch (error) {
     console.error('Error fetching borrowed books report:', error);
     res.status(500).json({ message: 'Failed to fetch borrowed books report.' });
   }
 };
+
 
 // Get a report of the most popular books
 export const getPopularBooksReport = async (req: Request, res: Response) => {

@@ -7,8 +7,8 @@ async function hashPassword(password: string) {
 }
 
 export async function seed(knex: Knex): Promise<void> {
-    // Check if the users table has any entries
-    const users = await knex("users").select("id");
+    // Check if the admin1 user already exists
+    const users = await knex("users").where({ email: 'admin1@example.com' });
 
     if (users.length === 0) {
         console.log("Seeding admin user...");

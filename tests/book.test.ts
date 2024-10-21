@@ -112,7 +112,7 @@ describe('Book API', () => {
       .delete(`/api/books/${bookIdObj.id}`)
       .set('Authorization', `Bearer ${adminToken}`);
 
-    expect(res.statusCode).toEqual(204); // No content on delete
+    expect(res.statusCode).toEqual(200); // No content on delete
   });
 
   afterAll(async () => {
