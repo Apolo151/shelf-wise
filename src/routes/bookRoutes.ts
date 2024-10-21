@@ -110,6 +110,9 @@ router.post('/', authenticateJWT, adminMiddleware, addBook);
  */
 router.put('/:id', authenticateJWT, updateBook);
 
+
+// Delete a book by ID (admin only)
+
 /**
  * @swagger
  * /books/{id}:
@@ -133,6 +136,6 @@ router.put('/:id', authenticateJWT, updateBook);
  *       404:
  *         description: Book not found.
  */
-router.delete('/:id', authenticateJWT, deleteBook);
+router.delete('/:id', authenticateJWT, adminMiddleware, deleteBook);
 
 export default router;

@@ -2,13 +2,14 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import dotenv from 'dotenv';
+import envFilePath from '../config/env-config';
 
 // Load environment variables from .env file
-dotenv.config();
+dotenv.config({ path: envFilePath });
 
 
 export const authenticateJWT = (req: Request, res: Response, next: NextFunction) => {
-  const token = req.headers['authorization']?.split(' ')[1]; // Extract token from Authorization header
+  const token = req.headers.authorization?.split(' ')[1]; // Extract token from Authorization header
   if (!token) {
     res.status(401).json({ error: 'Access denied' });
     next();

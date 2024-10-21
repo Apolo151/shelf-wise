@@ -1,28 +1,28 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from './database';
+import { sequelize } from './index';
 
 interface BorrowAttributes {
-  id: string;
+  id: number;
   borrowDate: Date;
   returnDate?: Date;
-  userId: string;
-  bookId: string;
+  userId: number;
+  bookId: number;
 }
 
 interface BorrowCreationAttributes extends Optional<BorrowAttributes, 'id'> {}
 
 class Borrow extends Model<BorrowAttributes, BorrowCreationAttributes> implements BorrowAttributes {
-  public id!: string;
+  public id!: number;
   public borrowDate!: Date;
   public returnDate?: Date;
-  public userId!: string;
-  public bookId!: string;
+  public userId!: number;
+  public bookId!: number;
 
   public readonly createdAt!: Date;
 
   static associate(models: any) {
-    Borrow.belongsTo(models.User, { foreignKey: 'userId' });
-    Borrow.belongsTo(models.Book, { foreignKey: 'bookId' });
+    Borrow.belongsTo(models.User, { foreignKey: 'userId', as: 'user' });
+    Borrow.belongsTo(models.Book, { foreignKey: 'bookId', as: 'book' });
   }
 }
 
@@ -42,11 +42,11 @@ Borrow.init(
       type: DataTypes.DATE,
     },
     userId: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
     bookId: {
-      type: DataTypes.UUID,
+      type: DataTypes.INTEGER,
       allowNull: false,
     },
   },

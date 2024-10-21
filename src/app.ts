@@ -1,6 +1,6 @@
 // src/app.ts
 import express from 'express';
-import { sequelize } from './models/database';
+import { sequelize } from './models/index';
 // Import routes
 import userRoutes from './routes/userRoutes';
 import bookRoutes from './routes/bookRoutes';
@@ -9,9 +9,11 @@ import reportRoutes from './routes/reportRoutes';
 
 import { ErrorHandler } from './middleware/errorHandler';
 import dotenv from 'dotenv';
+import reportRoutes from './routes/reportRoutes';
+import envFilePath from './config/env-config';
 import { setupSwagger } from './utils/swagger';
 
-dotenv.config(); // Load environment variables from .env file
+dotenv.config({ path: envFilePath });
 
 const app = express();
 
@@ -21,7 +23,7 @@ app.use(express.json()); // For parsing application/json
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/books', bookRoutes);
-app.use('/api/borrow', borrowRoutes);
+app.use('/api', borrowRoutes);
 app.use('/api/reports', reportRoutes);
 
 // Error handling middleware

@@ -46,7 +46,7 @@ const router = express.Router();
  *       401:
  *         description: Unauthorized. JWT token is missing or invalid.
  */
-//router.post('/', authenticateJWT, borrowBook);
+router.post('/borrow', authenticateJWT, borrowBook);
 
 /**
  * @swagger
@@ -82,7 +82,7 @@ const router = express.Router();
  *       401:
  *         description: Unauthorized. JWT token is missing or invalid.
  */
-router.patch('/return', authenticateJWT, returnBook);
+router.put('/return', authenticateJWT, returnBook);
 
 /**
  * @swagger
@@ -116,6 +116,6 @@ router.patch('/return', authenticateJWT, returnBook);
  *       401:
  *         description: Unauthorized. JWT token is missing or invalid.
  */
-router.get('/history', authenticateJWT, getBorrowHistory);
+router.get('/borrow/history', authenticateJWT, getBorrowHistory);
 
 export default router;

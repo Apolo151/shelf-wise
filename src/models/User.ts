@@ -1,8 +1,8 @@
 import { Model, DataTypes, Optional } from 'sequelize';
-import { sequelize } from './database';
+import { sequelize } from './index';
 
 interface UserAttributes {
-  id: string;
+  id: number;
   name: string;
   email: string;
   password: string;
@@ -12,7 +12,7 @@ interface UserAttributes {
 interface UserCreationAttributes extends Optional<UserAttributes, 'id'> {}
 
 class User extends Model<UserAttributes, UserCreationAttributes> implements UserAttributes {
-  public id!: string;
+  public id!: number;
   public name!: string;
   public email!: string;
   public password!: string;
@@ -22,6 +22,9 @@ class User extends Model<UserAttributes, UserCreationAttributes> implements User
 
   static associate(models: any) {
     User.hasMany(models.Borrow, { foreignKey: 'userId' });
+  }
+  static deleteMany() {
+    return User.destroy({ where: {} });
   }
 }
 
