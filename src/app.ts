@@ -5,11 +5,13 @@ import { sequelize } from './models/index';
 import userRoutes from './routes/userRoutes';
 import bookRoutes from './routes/bookRoutes';
 import borrowRoutes from './routes/borrowRoutes';
+import reportRoutes from './routes/reportRoutes';
 
 import { ErrorHandler } from './middleware/errorHandler';
 import dotenv from 'dotenv';
 import reportRoutes from './routes/reportRoutes';
 import envFilePath from './config/env-config';
+import { setupSwagger } from './utils/swagger';
 
 dotenv.config({ path: envFilePath });
 
@@ -31,5 +33,7 @@ app.use(ErrorHandler);
 sequelize.sync()
   .then(() => console.log('Database connected successfully'))
   .catch((error) => console.error('Database connection error:', error));
+
+setupSwagger(app);
 
 export default app;
