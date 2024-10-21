@@ -23,13 +23,12 @@ export const getBorrowedBooksReport = async (req: Request, res: Response) => {
 export const getPopularBooksReport = async (req: Request, res: Response) => {
   try {
     const popularBooks = await knex('borrows')
-      .select('bookId')
+      .select('books.id as bookId', 'books.title', 'books.author')
       .count('* as borrowCount') // Count the number of borrows per book
-      .groupBy('bookId') // Group by bookId to aggregate the count
-      .orderBy('borrowCount', 'desc') // Order by borrow count in descending order
-      .limit(10) // Limit to the top 10 popular books
       .join('books', 'borrows.bookId', '=', 'books.id') // Join with the books table to get additional details
-      .select('books.title', 'books.author'); // Select the desired book attributes
+      .groupBy('books.id', 'books.title', 'books.author') // Group by bookId and other selected fields
+      .orderBy('borrowCount', 'desc') // Order by borrow count in descending order
+      .limit(10); // Limit to the top 10 popular books
 
     res.status(200).json({ success: true, popularBooks });
   } catch (error) {
@@ -37,3 +36,4 @@ export const getPopularBooksReport = async (req: Request, res: Response) => {
     res.status(500).json({ message: 'Failed to fetch popular books report.' });
   }
 };
+

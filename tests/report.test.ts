@@ -1,30 +1,30 @@
 import request from 'supertest';
 import app from '../src/app';
-import User from '../src/models/User';
+import User, { UserAttributes } from '../src/models/User';
 import Book from '../src/models/Book';
 import Borrow from '../src/models/Borrow';
-import { closeDatabaseConnection } from '../src/models/index';
+import { knexInstance as knex } from '../src/database';
 import bcrypt from 'bcrypt';
 
 describe('Report API', () => {
   let userToken: string;
   let adminToken: string;
-  let user: User;
-  let admin: User;
+  let user: UserAttributes;
+  let admin: UserAttributes;
   let book1: Book;
   let book2: Book;
 
   beforeAll(async () => {
     // Create an admin user
     admin = await User.create({
-        name: 'Admin User',
+        full_name: 'Admin User',
         email: 'admin@example.com',
         password: await bcrypt.hash('password123', 10),
         role: 'admin',
     });
 
     user = await User.create({
-      name: 'Test User',
+      full_name: 'Test User',
       email: 'test.user@example.com',
       password: await bcrypt.hash('password123', 10),
       role: 'user',
@@ -63,12 +63,12 @@ describe('Report API', () => {
     // Create borrow records for the books
     await Borrow.create({
       userId: user.id,
-      bookId: book1.id,
+      bookId: book1.id as number,
       borrowDate: new Date(),
     });
     await Borrow.create({
       userId: user.id,
-      bookId: book2.id,
+      bookId: book2.id as number,
       borrowDate: new Date(),
     });
   });
@@ -84,27 +84,28 @@ describe('Report API', () => {
     expect(res.body.borrowedBooks.length).toBeGreaterThan(0); // Check that there are borrowed books
   });
 
-  // TODO: Fix popular controller and test
+  it('should return a report of the most popular books', async () => {
+    const res = await request(app)
+      .get('/api/reports/popular')
+      .set('Authorization', `Bearer ${adminToken}`);
 
-//   it('should return a report of the most popular books', async () => {
-//     const res = await request(app)
-//       .get('/api/reports/popular')
-//       .set('Authorization', `Bearer ${adminToken}`);
-
-//     expect(res.statusCode).toEqual(200);
-//     expect(res.body).toBeInstanceOf(Array);
-//     expect(res.body.length).toBeGreaterThan(0); // Check that there are popular books
-//     expect(res.body.popularBooks[0]).toHaveProperty('bookId'); // Check that it includes bookId
-//     expect(res.body.popularBooks[0]).toHaveProperty('borrowCount'); // Check that it includes borrowCount
-//   });
+    console.log(res.body);
+    expect(res.statusCode).toEqual(200);
+    expect(res.body.popularBooks).toBeInstanceOf(Array);
+    expect(res.body.popularBooks.length).toBeGreaterThan(0); // Check that there are popular books
+    expect(res.body.popularBooks[0]).toHaveProperty('bookId'); // Check that it includes bookId
+    expect(res.body.popularBooks[0]).toHaveProperty('borrowCount'); // Check that it includes borrowCount
+    expect(res.body.popularBooks[0]).toHaveProperty('title'); // Check that it includes title
+  });
 
   afterAll(async () => {
     // Clean up test data
-    await Borrow.destroy({ where: {} });
-    await Book.destroy({ where: {} });
-    await User.destroy({ where: {} });
+    await Borrow.destroy();
+    await Book.destroy();
+    await User.destroy();
 
     // Close database connection
-    await closeDatabaseConnection();
+    await knex.destroy();
+
   });
 });
