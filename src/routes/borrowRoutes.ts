@@ -50,8 +50,8 @@ router.post('/borrow', authenticateJWT, borrowBook);
 
 /**
  * @swagger
- * /borrow/return:
- *   patch:
+ * /return:
+ *   post:
  *     summary: Return a borrowed book
  *     tags: [Borrow]
  *     security:
@@ -82,7 +82,7 @@ router.post('/borrow', authenticateJWT, borrowBook);
  *       401:
  *         description: Unauthorized. JWT token is missing or invalid.
  */
-router.put('/return', authenticateJWT, returnBook);
+router.post('/return', authenticateJWT, returnBook);
 
 /**
  * @swagger

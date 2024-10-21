@@ -1,7 +1,6 @@
 // src/controllers/bookController.ts
 import { Request, Response } from 'express';
 import Book  from '../models/Book';
-import { knexInstance as knex} from '../database';
 
 // Retrieve all books
 export const getBooks = async (req: Request, res: Response) => {
@@ -22,7 +21,7 @@ export const addBook = async (req: Request, res: Response) => {
       title,
       author,
       genre,
-      availableCopies: availableCopies || 0, // Default to 0 if not provided
+      availableCopies: availableCopies || 1, // Default to 1 if not provided
     });
     res.status(201).json({ success: true, book: newBook });
   } catch (error) {
@@ -61,7 +60,7 @@ export const deleteBook = async (req: Request, res: Response) => {
   try {
     const deleted = await Book.delete(Number(id)); // Use repository to delete book
     if (deleted) {
-      res.status(204).json({ success: true, message: 'Book deleted' });
+      res.status(200).json({ success: true, message: 'Book deleted' });
     } else {
       res.status(404).json({ success: false, message: 'Book not found' });
     }

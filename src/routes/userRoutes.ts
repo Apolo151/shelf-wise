@@ -26,11 +26,11 @@ const router = express.Router();
  *           schema:
  *             type: object
  *             required:
- *               - name
+ *               - full_name
  *               - email
  *               - password
  *             properties:
- *               name:
+ *               full_name:
  *                 type: string
  *                 example: "John Doe"
  *               email:

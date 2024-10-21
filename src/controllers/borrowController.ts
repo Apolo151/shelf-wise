@@ -2,7 +2,6 @@
 import { Request, Response } from 'express';
 import Borrow from '../models/Borrow'; // Import the Knex-based Borrow model
 import Book from '../models/Book'; // Import the Book model
-import { knexInstance as knex } from '../database'; // Import your Knex instance
 
 // Borrow a book
 export const borrowBook = async (req: Request, res: Response) => {
@@ -14,22 +13,22 @@ export const borrowBook = async (req: Request, res: Response) => {
       res.status(404).json({ success: false, message: 'Book not found' });
       return;
     }
-    if (book.availableCopies === 0) {
+    if (book.availableCopies !== 0 && book.availableCopies !== undefined) {
+      // Create borrow record
+      const newBorrow = await Borrow.create(
+        {
+          userId: req.body.user.id,
+          bookId,
+          borrowDate: new Date(),
+        }
+      ); 
+      // Use update method to decrease available copies
+      await Book.update(bookId, { availableCopies: book.availableCopies - 1 }); 
+      res.status(200).json({ success: true, borrowId: newBorrow.id });
+    }
+    else{
       res.status(400).json({ success: false, message: 'Book is not available' });
     }
-
-    const borrowObj = {
-      userId: req.body.user.id,
-      bookId,
-      borrowDate: new Date(),
-    };
-    const newBorrow = await Borrow.create(borrowObj); // Create borrow record
-
-    // Update available copies of the book
-    if (book.availableCopies !== undefined) {
-      await Book.update(bookId, { availableCopies: book.availableCopies - 1 }); // Use update method to decrease available copies
-    }
-    res.status(200).json({ success: true, borrowId: newBorrow.id });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error borrowing book', error });
   }

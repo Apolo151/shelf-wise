@@ -20,7 +20,7 @@ const config: { [key: string]: Knex.Config } = {
     seeds: {
       directory: './db/seeds',
     },
-    debug: true,
+    debug: false,
   },
   test: {
     client: 'pg',

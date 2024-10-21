@@ -78,7 +78,7 @@ describe('Borrow API', () => {
     });
 
     const res = await request(app)
-      .put('/api/return')
+      .post('/api/return')
       .set('Authorization', `Bearer ${userToken}`)
       .send({ bookId: book1.id });
 
