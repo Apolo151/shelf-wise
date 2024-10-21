@@ -8,10 +8,10 @@ import borrowRoutes from './routes/borrowRoutes';
 import reportRoutes from './routes/reportRoutes';
 
 import { ErrorHandler } from './middleware/errorHandler';
-import dotenv from 'dotenv';
-import reportRoutes from './routes/reportRoutes';
-import envFilePath from './config/env-config';
 import { setupSwagger } from './utils/swagger';
+
+import dotenv from 'dotenv';
+import envFilePath from './config/env-config';
 
 dotenv.config({ path: envFilePath });
 
