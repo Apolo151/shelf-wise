@@ -3,7 +3,7 @@
 ```mermaid
 erDiagram
     USER {
-        UUID id PK
+        INTEGER id PK
         STRING full_name
         STRING email
         STRING password
@@ -11,7 +11,7 @@ erDiagram
     }
 
     BOOK {
-        UUID id PK
+        INTEGER id PK
         STRING title
         STRING author
         STRING genre
@@ -19,9 +19,9 @@ erDiagram
     }
 
     BORROW {
-        UUID id PK
-        UUID userId FK "References USER(id)"
-        UUID bookId FK "References BOOK(id)"
+        INTEGER id PK
+        INTEGER userId FK "References USER(id)"
+        INTEGER bookId FK "References BOOK(id)"
         DATE borrowDate
         DATE returnDate
         STRING status

@@ -32,7 +32,7 @@ describe('Report API', () => {
 
     // Get user token
     const userLoginRes = await request(app)
-      .post('/api/users/login')
+      .post('/api/login')
       .send({
         email: 'test.user@example.com',
         password: 'password123',
@@ -41,7 +41,7 @@ describe('Report API', () => {
 
     // Get user token
     const adminLoginRes = await request(app)
-      .post('/api/users/login')
+      .post('/api/login')
       .send({
         email: 'admin@example.com',
         password: 'password123',

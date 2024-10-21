@@ -1,7 +1,6 @@
-// src/routes/reportRoutes.ts
 import express from 'express';
 import { getBorrowedBooksReport, getPopularBooksReport } from '../controllers/reportController';
-import { authenticateJWT } from '../middleware/authMiddleware'; // Import your authentication middleware
+import { authenticateJWT } from '../middleware/authMiddleware';
 
 const router = express.Router();
 

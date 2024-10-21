@@ -1,7 +1,6 @@
-// src/routes/bookRoutes.ts
 import express from 'express';
-import { addBook, updateBook, deleteBook, getBooks } from '../controllers/bookController'; // Import book controller functions
-import { authenticateJWT } from '../middleware/authMiddleware'; // Import JWT middleware
+import { addBook, updateBook, deleteBook, getBooks } from '../controllers/bookController';
+import { authenticateJWT } from '../middleware/authMiddleware';
 import adminMiddleware from '../middleware/adminMiddleware';
 import { validateBookData } from '../middleware/validationMiddleware';
 

@@ -11,7 +11,7 @@ describe('User API', () => {
 
   it('should register a new user', async () => {
     const res = await request(app)
-      .post('/api/users/register')
+      .post('/api/register')
       .send({
         full_name: 'John Doe',
         email: 'john.doe@example.com',
@@ -27,7 +27,7 @@ describe('User API', () => {
   it('should login a user', async () => {
     // First, register the user
     await request(app)
-      .post('/api/users/register')
+      .post('/api/register')
       .send({
         full_name: 'John Doe',
         email: 'john.doe@example.com',
@@ -36,7 +36,7 @@ describe('User API', () => {
     
     // Now, log in with the same user credentials
     const res = await request(app)
-      .post('/api/users/login')
+      .post('/api/login')
       .send({
         email: 'john.doe@example.com',
         password: 'password123',

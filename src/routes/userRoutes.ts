@@ -1,7 +1,5 @@
-// src/routes/userRoutes.ts
 import express from 'express';
-import { registerUser, loginUser } from '../controllers/userController'; // Import user controller functions
-// import { authenticateJWT } from '../middleware/authMiddleware'; // Import JWT middleware
+import { registerUser, loginUser } from '../controllers/userController';
 import { validateUserRegistration } from '../middleware/validationMiddleware';
 
 const router = express.Router();
@@ -15,7 +13,7 @@ const router = express.Router();
 
 /**
  * @swagger
- * /users/register:
+ * /register:
  *   post:
  *     summary: Register a new user
  *     tags: [Users]
@@ -49,7 +47,7 @@ router.post('/register', validateUserRegistration, registerUser);
 
 /**
  * @swagger
- * /users/login:
+ * /login:
  *   post:
  *     summary: Login a user
  *     tags: [Users]

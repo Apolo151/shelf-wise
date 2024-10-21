@@ -31,7 +31,7 @@ describe('Borrow API', () => {
 
     // Get their tokens
     const adminLoginRes = await request(app)
-      .post('/api/users/login')
+      .post('/api/login')
       .send({
         email: 'admin@example.com',
         password: 'adminpassword',
@@ -39,7 +39,7 @@ describe('Borrow API', () => {
     adminToken = adminLoginRes.body.token;
 
     const userLoginRes = await request(app)
-      .post('/api/users/login')
+      .post('/api/login')
       .send({
         email: 'user@example.com',
         password: 'userpassword',
