@@ -8,4 +8,5 @@ module.exports = {
     transform: {
       '^.+\\.tsx?$': 'ts-jest',
     },
+    testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/dist/'],
   };  

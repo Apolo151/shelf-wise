@@ -1,11 +1,12 @@
 // src/controllers/bookController.ts
 import { Request, Response } from 'express';
-import Book  from '../models/Book'; // Import the Book model
+import Book  from '../models/Book';
+import { knexInstance as knex} from '../database';
 
 // Retrieve all books
 export const getBooks = async (req: Request, res: Response) => {
   try {
-    const books = await Book.findAll(); // Get all books
+    const books = await Book.findAll(); // Use repository to get all books
     res.json({ success: true, books });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error fetching books', error });
@@ -14,10 +15,15 @@ export const getBooks = async (req: Request, res: Response) => {
 
 // Add a new book (admin only)
 export const addBook = async (req: Request, res: Response) => {
-  const { title, author, genre, availableCopies} = req.body;
+  const { title, author, genre, availableCopies } = req.body;
 
   try {
-    const newBook = await Book.create({ title, author, genre, availableCopies: (availableCopies|0)}); // Create book
+    const newBook = await Book.create({
+      title,
+      author,
+      genre,
+      availableCopies: availableCopies || 0, // Default to 0 if not provided
+    });
     res.status(201).json({ success: true, book: newBook });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Error adding book', error });
@@ -26,13 +32,19 @@ export const addBook = async (req: Request, res: Response) => {
 
 // Update a book (admin only)
 export const updateBook = async (req: Request, res: Response) => {
-  const { id } = req.params;
-  const { title, author, isbn } = req.body;
+  const id = Number(req.params.id)
+  const { title, author, genre, availableCopies } = req.body;
 
   try {
-    const [updated] = await Book.update({ title, author}, { where: { id } }); // Update book
+    const updated = await Book.update(Number(id), {
+      title,
+      author,
+      genre,
+      availableCopies,
+    });
+
     if (updated) {
-      const updatedBook = await Book.findByPk(id); // Get updated book
+      const updatedBook = await Book.findById(Number(id));
       res.json({ success: true, book: updatedBook });
     } else {
       res.status(404).json({ success: false, message: 'Book not found' });
@@ -47,7 +59,7 @@ export const deleteBook = async (req: Request, res: Response) => {
   const { id } = req.params;
 
   try {
-    const deleted = await Book.destroy({ where: { id } }); // Delete book
+    const deleted = await Book.delete(Number(id)); // Use repository to delete book
     if (deleted) {
       res.status(204).json({ success: true, message: 'Book deleted' });
     } else {

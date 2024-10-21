@@ -1,29 +1,29 @@
 import request from 'supertest';
 import app from '../src/app';
 import Book from '../src/models/Book';
-import User from '../src/models/User';
-import Borrow from '../src/models/Borrow';
-import { closeDatabaseConnection } from '../src/models/index';
+import User, { UserAttributes } from '../src/models/User';
+import Borrow, { BorrowAttributes } from '../src/models/Borrow';
 import bcrypt from 'bcrypt';
+import { knexInstance as knex } from '../src/database';
 
 describe('Borrow API', () => {
   let adminToken: string;
   let userToken: string;
-  let user: User;
-  let admin: User;
+  let user: UserAttributes;
+  let admin: UserAttributes;
   let book1: Book;
   let book2: Book;
 
   beforeAll(async () => {
     // Seed an admin and user
     admin = await User.create({
-      name: 'Admin',
+      full_name: 'Admin',
       email: 'admin@example.com',
       password: await bcrypt.hash('adminpassword', 10),
       role: 'admin',
     });
     user = await User.create({
-      name: 'User',
+      full_name: 'User',
       email: 'user@example.com',
       password: await bcrypt.hash('userpassword', 10),
       role: 'user',
@@ -73,7 +73,7 @@ describe('Borrow API', () => {
     // Setup a borrow record
     const borrowRecord = await Borrow.create({
       userId: user.id,
-      bookId: book1.id,
+      bookId: book1.id as number,
       borrowDate: new Date(),
     });
 
@@ -83,18 +83,18 @@ describe('Borrow API', () => {
       .send({ bookId: book1.id });
 
     // Fetch the updated borrow record from the database
-    const updatedBorrowRecord = await Borrow.findByPk(borrowRecord.id) as Borrow;
+    const updatedBorrowRecord = await Borrow.findById(borrowRecord.id) as BorrowAttributes;
 
     expect(res.statusCode).toEqual(200);
-    expect(updatedBorrowRecord.returnDate).not.toBeNull();
+    expect(updatedBorrowRecord.returnDate).not.toBeUndefined;
   });
 
   afterAll(async () => {
-    await Book.destroy({ where: {} });
-    await User.destroy({ where: {} });
-    await Borrow.destroy({ where: {} });
+    await Book.destroy();
+    await User.destroy();
+    await Borrow.destroy();
 
     // Close database connection
-    await closeDatabaseConnection();
+    await knex.destroy();
   });
 });
