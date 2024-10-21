@@ -1,7 +1,6 @@
-// src/routes/reportRoutes.ts
 import express from 'express';
 import { getBorrowedBooksReport, getPopularBooksReport } from '../controllers/reportController';
-import { authenticateJWT } from '../middleware/authMiddleware'; // Import your authentication middleware
+import { authenticateJWT } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
@@ -45,7 +44,7 @@ const router = express.Router();
  *       401:
  *         description: Unauthorized. JWT token is missing or invalid.
  */
-router.get('/borrowed', authenticateJWT, getBorrowedBooksReport);
+router.get('/borrowed', getBorrowedBooksReport);
 
 /**
  * @swagger
@@ -80,6 +79,6 @@ router.get('/borrowed', authenticateJWT, getBorrowedBooksReport);
  *       401:
  *         description: Unauthorized. JWT token is missing or invalid.
  */
-router.get('/popular', authenticateJWT, getPopularBooksReport);
+router.get('/popular', getPopularBooksReport);
 
 export default router;

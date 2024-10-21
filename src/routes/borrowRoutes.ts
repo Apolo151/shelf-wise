@@ -1,7 +1,6 @@
-// src/routes/borrowRoutes.ts
 import express from 'express';
-import { borrowBook, returnBook, getBorrowHistory } from '../controllers/borrowController'; // Import borrow controller functions
-import { authenticateJWT } from '../middleware/authMiddleware'; // Import JWT middleware
+import { borrowBook, returnBook, getBorrowHistory } from '../controllers/borrowController';
+import { authenticateJWT } from '../middleware/authMiddleware';
 
 const router = express.Router();
 
