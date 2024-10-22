@@ -15,6 +15,10 @@ const swaggerDefinition = {
       url: 'http://localhost:3000/api', // URL of your API, adjust as needed
       description: 'Development server',
     },
+    {
+      url: 'https://shelf-wise-six.vercel.app/api', // URL of your production server
+      description: 'Production server',
+    }
   ],
   components: {
     securitySchemes: {
