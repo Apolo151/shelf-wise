@@ -2,6 +2,20 @@
 
 ShelfWise is a library management system designed to streamline the process of managing books, users, borrowing records, and generating reports such as popular books. It provides features for user registration, book borrowing, and administration functionalities.
 
+> You can access the deployed API swagger page [here](https://shelf-wise-atiex.ondigitalocean.app/api/)
+
+## Table of Contents
+- [Features](#features)
+- [File Structure](#file-structure)
+- [Setup Steps](#setup-steps)
+  - [Prerequisites](#prerequisites)
+  - [Local Setup](#local-setup)
+  - [Docker Setup](#docker-setup)
+
+----
+- [API Documentation](docs/API-Document.md)
+- [Database Schema](docs/ERD.md)
+- [Sequence Diagrams](docs/SequenceDiagram.md)
 ## Features
 
 - **User Management**: Users can register, log in, and perform various actions like borrowing books.
