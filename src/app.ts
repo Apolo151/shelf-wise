@@ -1,6 +1,5 @@
 // src/app.ts
 import express from 'express';
-import bodyParser from 'body-parser';
 // Import routes
 import userRoutes from './routes/userRoutes';
 import bookRoutes from './routes/bookRoutes';
@@ -9,12 +8,15 @@ import reportRoutes from './routes/reportRoutes';
 
 import { ErrorHandler } from './middleware/errorHandler';
 import { setupSwagger } from './utils/swagger';
-
+import cors from 'cors';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
 const app = express();
+
+// Enable CORS for all routes (should be limited in production)
+app.use(cors());
 
 // Middleware
 app.use(express.json()); // For parsing application/json

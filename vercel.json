@@ -4,12 +4,16 @@
     {
       "src": "src/server.ts",
       "use": "@vercel/node"
+    },
+    {
+      "src": "docs/swagger.json",
+      "use": "@vercel/static"
     }
   ],
   "routes": [
     {
       "src": "/api/docs",
-      "dest": "/src/server.ts"
+      "dest": "/docs/swagger.json"
     },
     {
       "src": "/(.*)",
