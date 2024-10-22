@@ -16,7 +16,7 @@ const swaggerDefinition = {
       description: 'Development server',
     },
     {
-      url: 'https://shelf-wise-six.vercel.app/api', // URL of your production server
+      url: 'https://shelf-wise-atiex.ondigitalocean.app/api/', // URL of your production server
       description: 'Production server',
     }
   ],
