@@ -1,6 +1,5 @@
 // src/app.ts
 import express from 'express';
-import bodyParser from 'body-parser';
 // Import routes
 import userRoutes from './routes/userRoutes';
 import bookRoutes from './routes/bookRoutes';
