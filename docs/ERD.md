@@ -24,7 +24,6 @@ erDiagram
         INTEGER bookId FK "References BOOK(id)"
         DATE borrowDate
         DATE returnDate
-        STRING status
     }
 
     USER ||--o{ BORROW : "borrows"
